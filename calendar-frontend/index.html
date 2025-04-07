@@ -2,115 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Important Events Countdown</title>
+  <title>All-Day Event Countdown</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f4f4;
-      padding: 30px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
       margin: 0;
+      padding: 20px;
       text-align: center;
     }
 
     h1 {
-      color: #333;
       margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .controls input,
+    .controls select {
+      padding: 8px;
+      width: 250px;
+      font-size: 16px;
     }
 
     .event-card {
       background: white;
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 500px;
-      margin: 15px auto;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 10px auto;
+      padding: 15px;
+      text-align: left;
     }
 
-    .event-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #007acc;
-    }
-
-    .event-date {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-
-    .event-countdown {
+    .event-card .title {
       font-size: 18px;
-      color: #222;
-      margin-top: 10px;
+      font-weight: bold;
     }
 
-    @media (max-width: 600px) {
-      .event-card {
-        margin: 10px;
-      }
+    .event-card .date {
+      margin-top: 5px;
+      color: #555;
+    }
+
+    .event-card .countdown {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .birthday {
+      border-left: 5px solid #ff80ab;
+    }
+
+    .exam {
+      border-left: 5px solid #ffb74d;
+    }
+
+    .work {
+      border-left: 5px solid #64b5f6;
+    }
+
+    .default {
+      border-left: 5px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>All Upcoming Events</h1>
-  <div id="events">Loading events...</div>
+  <h1>🎯 Upcoming All-Day Events</h1>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="🔍 Search by title or date..." />
+    <select id="dateFilter">
+      <option value="all">📅 All Future Events</option>
+      <option value="7">🗓️ Next 7 Days</option>
+      <option value="30">📆 This Month</option>
+    </select>
+  </div>
+
+  <div id="events">Loading...</div>
 
   <script>
     async function fetchEvents() {
-      try {
-        const res = await fetch("http://localhost:3000/events");
-        const events = await res.json();
-        return events;
-      } catch (e) {
-        document.getElementById("events").innerText = "Could not load events.";
-        console.error(e);
-        return [];
-      }
+      const res = await fetch("https://rohanbagga-github-io.onrender.com/events");
+      return res.json();
     }
 
-    function renderEvent(event) {
-      const eventEl = document.createElement("div");
-      eventEl.className = "event-card";
-
-      const title = document.createElement("div");
-      title.className = "event-title";
-      title.innerText = event.summary;
-
-      const date = new Date(event.date);
+    function getDaysRemaining(dateStr) {
       const today = new Date();
-      const timeDiff = date - today;
-      const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-      const dateEl = document.createElement("div");
-      dateEl.className = "event-date";
-      dateEl.innerText = `📅 ${date.toDateString()}`;
-
-      const countdown = document.createElement("div");
-      countdown.className = "event-countdown";
-      countdown.innerText =
-        daysRemaining > 0
-          ? `⏳ ${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} remaining`
-          : daysRemaining === 0
-          ? "🟡 Today!"
-          : "✅ Already passed";
-
-      eventEl.appendChild(title);
-      eventEl.appendChild(dateEl);
-      eventEl.appendChild(countdown);
-
-      document.getElementById("events").appendChild(eventEl);
+      const eventDate = new Date(dateStr);
+      const diffTime = eventDate - today;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
 
-    fetchEvents().then(events => {
+    function getTag(summary) {
+      summary = summary.toLowerCase();
+      if (summary.includes("birthday")) return "birthday";
+      if (summary.includes("exam") || summary.includes("test")) return "exam";
+      if (summary.includes("meeting") || summary.includes("project")) return "work";
+      return "default";
+    }
+
+    function renderEvents(events) {
       const container = document.getElementById("events");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const filterDays = document.getElementById("dateFilter").value;
+
       container.innerHTML = "";
 
-      if (events.length === 0) {
-        container.innerText = "No upcoming all-day events found.";
+      const filtered = events.filter(e => {
+        const days = getDaysRemaining(e.date);
+        const matchSearch = e.summary.toLowerCase().includes(search) || e.date.includes(search);
+        const matchTime = filterDays === "all" || days <= parseInt(filterDays);
+        return days >= 0 && matchSearch && matchTime;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = "<p>No matching events.</p>";
         return;
       }
 
-      events.forEach(renderEvent);
+      filtered.forEach(event => {
+        const div = document.createElement("div");
+        const tag = getTag(event.summary);
+        div.className = `event-card ${tag}`;
+
+        const days = getDaysRemaining(event.date);
+        const countdownText = days === 0
+          ? "🟡 Today!"
+          : `${days} day${days > 1 ? "s" : ""} remaining`;
+
+        div.innerHTML = `
+          <div class="title">${event.summary}</div>
+          <div class="date">📅 ${new Date(event.date).toDateString()}</div>
+          <div class="countdown">⏳ ${countdownText}</div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    fetchEvents().then(events => {
+      renderEvents(events);
+
+      document.getElementById("searchInput").addEventListener("input", () => renderEvents(events));
+      document.getElementById("dateFilter").addEventListener("change", () => renderEvents(events));
     });
   </script>
 </body>
