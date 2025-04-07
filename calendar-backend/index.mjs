@@ -19,8 +19,9 @@ function authorize(callback) {
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
-    redirect_uris[0]
+    'https://rohanbagga-github-io.onrender.com/oauth2callback' 
   );
+  
 
   if (fs.existsSync(TOKEN_PATH)) {
     oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
