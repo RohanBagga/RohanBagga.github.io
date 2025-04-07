@@ -13,7 +13,7 @@ const TOKEN_PATH = 'token.json';
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 
 function authorize(callback) {
-  const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH));
+  const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
   const { client_secret, client_id, redirect_uris } = credentials.installed || credentials.web;
 
   const oAuth2Client = new google.auth.OAuth2(
@@ -23,7 +23,7 @@ function authorize(callback) {
   );
 
   if (fs.existsSync(TOKEN_PATH)) {
-    oAuth2Client.setCredentials(JSON.parse(fs.readFileSync(TOKEN_PATH)));
+    oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
     callback(oAuth2Client);
   } else {
     const authUrl = oAuth2Client.generateAuthUrl({
