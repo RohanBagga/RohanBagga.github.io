@@ -1,0 +1,67 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .controls input,
+  .controls select {
+    padding: 8px;
+    width: 250px;
+    font-size: 16px;
+  }
+
+  .event-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 10px auto;
+    padding: 15px;
+    text-align: left;
+  }
+
+  .event-card .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .event-card .date {
+    margin-top: 5px;
+    color: #555;
+  }
+
+  .event-card .countdown {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .birthday {
+    border-left: 5px solid #ff80ab;
+  }
+
+  .exam {
+    border-left: 5px solid #ffb74d;
+  }
+
+  .work {
+    border-left: 5px solid #64b5f6;
+  }
+
+  .default {
+    border-left: 5px solid #ccc;
+  }
