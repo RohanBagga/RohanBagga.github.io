@@ -2,8 +2,10 @@ import fs from 'fs';
 import express from 'express';
 import { google } from 'googleapis';
 import open from 'open';
+import cors from 'cors'; 
 
 const app = express();
+app.use(cors()); 
 const PORT = 3000;
 
 const CREDENTIALS_PATH = 'googleCal_cred.json';
@@ -51,9 +53,9 @@ app.get('/events', (req, res) => {
       const now = new Date();
 
       const result = await calendar.events.list({
-        calendarId: 'rohanbagga123@gmail.com', // your calendar only
-        timeMin: now.toISOString(),           // from now
-        // ❌ removed timeMax — no upper limit
+        calendarId: 'rohanbagga123@gmail.com', 
+        timeMin: now.toISOString(),         
+
         maxResults: 500,
         singleEvents: true,
         orderBy: 'startTime',
@@ -72,7 +74,6 @@ app.get('/events', (req, res) => {
           date: event.start.date || event.start.dateTime,
         }));
 
-      // Optional: sort by date ascending
       filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       res.json(filtered);
@@ -83,7 +84,9 @@ app.get('/events', (req, res) => {
   });
 });
 
-
+app.get('/', (req, res) => {
+  res.send('✅ Calendar backend is running.');
+});
 
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
