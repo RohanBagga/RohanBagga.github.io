@@ -103,7 +103,6 @@ async function fetchCalendarEvents() {
   }
 }
 
-
 function filterAndDisplayEvents() {
   calendarContainer.innerHTML = "";
 
@@ -124,26 +123,24 @@ function filterAndDisplayEvents() {
     const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
   
     const title = (event.summary || "").toLowerCase().trim();
-    const matchesSearch = title.includes(query.toLowerCase().trim());
+    const words = title.split(/\s+/);
+    const matchesSearch = title.startsWith(query);
     const matchesDate =
       filterDays === "all" || (diffDays >= 0 && diffDays <= parseInt(filterDays));
   
     return diffDays >= 0 && matchesSearch && matchesDate;
-  })  
-    .sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
-
-  if (!filtered.length) {
-    calendarContainer.innerHTML = "<p>No matching all-day events.</p>";
-    return;
-  }
+  })
+  
 
   filtered.forEach(event => {
     const title = event.summary || "Untitled";
     const rawDate = event.start.date;
-    const eventDate = new Date(rawDate);
 
-    const diffTime = eventDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const eventDate = new Date(rawDate);
+    eventDate.setHours(0, 0, 0, 0); // ✅ normalize again
+
+    const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+    console.log("Rendering event:", title, "| Days away:", diffDays);
 
     const div = document.createElement("div");
     div.className = "event-card";
