@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google Calendar App</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script> <!-- ✅ CORRECT -->
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <h1>My Google Calendar Events</h1>
+  <h1>📅 My Calendar Dashboard</h1>
 
-  <button id="signin-btn">Sign in with Google</button>
-  <button id="signout-btn" style="display:none;">Sign out</button>
+  <div class="controls">
+    <button id="signin-btn">Sign in with Google</button>
+    <button id="signout-btn" style="display:none;">Sign out</button>
+  </div>
 
-  <div id="calendar-events" style="margin-top: 20px;"></div>
+  <div class="controls">
+    <input id="searchInput" type="text" placeholder="Search local events..." />
+    <select id="dateFilter">
+      <option value="all">All</option>
+      <option value="7">Next 7 days</option>
+      <option value="30">Next 30 days</option>
+    </select>
+    <button id="toggleView">Toggle Compact Mode</button>
+  </div>
+
+  <h2>🗓 Local Events</h2>
+  <div id="events"></div>
+
+  <h2>📆 Google Calendar Events</h2>
+  <div id="calendar-events"></div>
 
   <script src="script.js"></script>
 </body>

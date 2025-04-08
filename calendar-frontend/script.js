@@ -23,7 +23,7 @@ window.onload = () => {
     tokenClient.requestAccessToken();
   });
 
-  // Sign out
+
   document.getElementById("signout-btn").addEventListener("click", () => {
     accessToken = null;
     localStorage.removeItem("google_access_token");
@@ -32,7 +32,7 @@ window.onload = () => {
     document.getElementById("calendar-events").innerHTML = "";
   });
 
-  // Auto-restore session if token exists
+
   const storedToken = localStorage.getItem("google_access_token");
   if (storedToken) {
     accessToken = storedToken;
