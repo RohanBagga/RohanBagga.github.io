@@ -4,16 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google Calendar App</title>
+
+
   <link rel="stylesheet" href="styles.css" />
+
+
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
   <h1>📅 My Calendar Dashboard</h1>
+
 
   <div class="controls">
     <button id="signin-btn">Sign in with Google</button>
     <button id="signout-btn" style="display:none;">Sign out</button>
   </div>
+
 
   <div class="controls">
     <input id="searchInput" type="text" placeholder="Search local events..." />
@@ -25,11 +32,9 @@
     <button id="toggleView">Toggle Compact Mode</button>
   </div>
 
-  <!-- <h2>🗓 Local Events</h2>
-  <div id="events"></div> -->
 
   <h2>📆 Google Calendar Events</h2>
-  <div id="calendar-events"></div>
+  <div id="calendar-events">Sign in to load events.</div>
 
   <script src="script.js"></script>
 </body>
