@@ -5,7 +5,7 @@ const CLIENT_ID = "1032345992294-48boa203ightsaf4o186tqgtu8c13l4n.apps.googleuse
 const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
 window.onload = () => {
-  // Initialize GIS token client
+
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
@@ -18,7 +18,7 @@ window.onload = () => {
     },
   });
 
-  // Sign in
+
   document.getElementById("signin-btn").addEventListener("click", () => {
     tokenClient.requestAccessToken();
   });
