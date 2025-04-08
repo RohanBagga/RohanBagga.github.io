@@ -71,12 +71,18 @@ async function fetchCalendarEvents() {
       maxResults: 100,
     });
 
-    allEvents = (response.result.items || []).filter(e => !!e.start?.date); 
+    console.log("Raw events response:", response);
+
+    allEvents = (response.result.items || []).filter(e => !!e.start?.date); // All-day only
+    console.log("Filtered all-day events:", allEvents);
+
+    filterAndDisplayEvents(); // trigger display
   } catch (error) {
-    console.error("Failed to fetch events:", error);
+    console.error("❌ Failed to fetch events:", error);
     calendarContainer.innerHTML = "❌ Failed to fetch events.";
   }
 }
+
 
 function filterAndDisplayEvents() {
   calendarContainer.innerHTML = "";
