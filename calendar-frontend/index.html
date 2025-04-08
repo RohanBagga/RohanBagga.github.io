@@ -4,47 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google Calendar App</title>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 2rem;
-    }
-    button {
-      margin: 0.5rem 0;
-    }
-    .event-card {
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin: 0.5rem 0;
-    }
-  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <h1>My Google Calendar Events</h1>
 
-  <!-- Sign-in & sign-out -->
-  <button onclick="startGoogleAuth()">Sign in with Google</button>
-  <button id="logoutBtn" style="display: none;">Sign Out</button>
+  <button id="signin-btn">Sign in with Google</button>
+  <button id="signout-btn" style="display:none;">Sign out</button>
 
-  <!-- Optional: Local backend event filters -->
-  <div style="margin-top: 1rem;">
-    <input id="searchInput" placeholder="Search events..." />
-    <select id="dateFilter">
-      <option value="all">All</option>
-      <option value="7">Next 7 Days</option>
-      <option value="30">Next 30 Days</option>
-    </select>
-    <button id="toggleView">Toggle Compact Mode</button>
-  </div>
-
-  <!-- Rendered events -->
-  <h2 style="margin-top: 2rem;">Local Events</h2>
-  <div id="events"></div>
-
-  <h2>Google Calendar Events</h2>
-  <div id="calendar-events"></div>
+  <div id="calendar-events" style="margin-top: 20px;"></div>
 
   <script src="script.js"></script>
 </body>
