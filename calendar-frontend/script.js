@@ -19,10 +19,30 @@ window.onload = () => {
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
-    callback: handleTokenResponse,
+    // callback: handleTokenResponse,
   });
 
-  signInButton.onclick = () => tokenClient.requestAccessToken({ prompt: 'consent' });
+  signInButton.onclick = () => {
+    tokenClient.callback = async (response) => {
+      if (response.error) {
+        console.error("OAuth error:", response);
+        alert("Error signing in");
+        return;
+      }
+  
+      accessToken = response.access_token;
+      console.log("✅ Token:", accessToken);
+  
+      signInButton.style.display = "none";
+      signOutButton.style.display = "inline-block";
+      calendarContainer.innerHTML = "🔄 Loading events...";
+  
+      await fetchCalendarEvents();
+    };
+  
+    tokenClient.requestAccessToken({ prompt: 'consent' });
+  };
+  
   signOutButton.onclick = handleSignoutClick;
 
   searchInput.addEventListener("input", filterAndDisplayEvents);
