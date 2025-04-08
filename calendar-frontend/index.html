@@ -2,27 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>All-Day Event Countdown</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Link your CSS file -->
-  <link rel="stylesheet" href="styles.css" />
+  <title>Google Calendar App</title>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+    button {
+      margin: 0.5rem 0;
+    }
+    .event-card {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+    }
+  </style>
 </head>
 <body>
-  <h1>🎯 Upcoming All-Day Events</h1>
+  <h1>My Google Calendar Events</h1>
 
-  <div class="controls">
-    <input type="text" id="searchInput" placeholder="🔍 Search by title or date..." />
+  <!-- Sign-in & sign-out -->
+  <button onclick="startGoogleAuth()">Sign in with Google</button>
+  <button id="logoutBtn" style="display: none;">Sign Out</button>
+
+  <!-- Optional: Local backend event filters -->
+  <div style="margin-top: 1rem;">
+    <input id="searchInput" placeholder="Search events..." />
     <select id="dateFilter">
-      <option value="all">📅 All Future Events</option>
-      <option value="7">🗓️ Next 7 Days</option>
-      <option value="30">📆 This Month</option>
+      <option value="all">All</option>
+      <option value="7">Next 7 Days</option>
+      <option value="30">Next 30 Days</option>
     </select>
-    <button id="toggleView">🔁 Toggle Compact View</button>
+    <button id="toggleView">Toggle Compact Mode</button>
   </div>
 
-  <div id="events">Loading...</div>
+  <!-- Rendered events -->
+  <h2 style="margin-top: 2rem;">Local Events</h2>
+  <div id="events"></div>
 
+  <h2>Google Calendar Events</h2>
+  <div id="calendar-events"></div>
 
   <script src="script.js"></script>
 </body>
