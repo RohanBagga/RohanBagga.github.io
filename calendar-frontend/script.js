@@ -64,10 +64,46 @@ function displayEvents(events) {
 
   events.forEach(event => {
     const div = document.createElement("div");
-    div.className = "event-card";
-    div.textContent = `📅 ${event.summary || "Untitled"} - ${event.start?.dateTime || event.start?.date}`;
+
+    const title = event.summary || "Untitled";
+    const rawDate = event.start?.dateTime || event.start?.date || null;
+
+    if (!rawDate) return; // skip if no date
+
+    const eventDate = new Date(rawDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // normalize time
+    eventDate.setHours(0, 0, 0, 0);
+
+    const diffTime = eventDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    const countdownText =
+      diffDays === 0
+        ? "🟡 Today!"
+        : diffDays === 1
+        ? "1 day remaining"
+        : diffDays < 0
+        ? `⏳ Past event`
+        : `${diffDays} days remaining`;
+
+    // 🌈 Tag category
+    let tagClass = "default";
+    const lowered = title.toLowerCase();
+    if (lowered.includes("birthday")) tagClass = "birthday";
+    else if (lowered.includes("exam") || lowered.includes("test")) tagClass = "exam";
+    else if (lowered.includes("meeting") || lowered.includes("project")) tagClass = "work";
+
+    div.className = `event-card ${tagClass}`;
+    div.innerHTML = `
+      <div class="title">${title}</div>
+      <div class="date">📅 ${eventDate.toDateString()}</div>
+      <div class="countdown">⏳ ${countdownText}</div>
+    `;
+
     container.appendChild(div);
   });
 }
+
 
   
